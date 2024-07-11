@@ -1,9 +1,20 @@
-// Initialize Three.js scene, camera, and renderer
+// Function to start the game
+function startGame() {
+    document.getElementById('titleScreen').style.display = 'none';
+    document.getElementById('info').style.display = 'block';
+    animate();  // Start the game animation loop
+}
+
+// Event listener for the "Start Game" button
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('startButton').addEventListener('click', startGame);
+});
+
+// Initialize Three.js components
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas') });
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 
 // Example: Add ambient light
 const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
@@ -19,7 +30,7 @@ let bike;
 
 const loader = new THREE.GLTFLoader();
 loader.load(
-    'path/to/bike_model.glb',
+    'models/bike_model.glb',
     function (gltf) {
         bike = gltf.scene;
         bike.position.set(0, 0, 0);
@@ -68,13 +79,6 @@ function animate() {
 
     renderer.render(scene, camera);
 }
-
-// Example: Start game on button click
-document.getElementById('startButton').addEventListener('click', () => {
-    document.getElementById('titleScreen').style.display = 'none';
-    document.getElementById('info').style.display = 'block';
-    animate();  // Start the game animation loop
-});
 
 // Example: Handle window resizing
 window.addEventListener('resize', () => {
