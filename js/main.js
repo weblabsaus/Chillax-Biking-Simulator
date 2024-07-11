@@ -36,10 +36,15 @@ function init() {
             // Hide loading screen and show game UI
             loadingScreen.style.display = 'none';
             document.getElementById('gameContainer').style.display = 'block';
+
+            // Start game when the model is loaded
+            startGame();
         },
         undefined,
         function (error) {
             console.error('Error loading bike model:', error);
+            loadingScreen.style.display = 'none'; // Hide loading screen on error
+            alert('Failed to load bike model. Please refresh the page to try again.');
         }
     );
 
@@ -68,19 +73,23 @@ function animate() {
     requestAnimationFrame(animate);
 
     // Bike movement based on keys
-    if (keys['KeyW']) bike.position.z -= Math.cos(bike.rotation.y) * bikeSpeed;
-    if (keys['KeyS']) bike.position.z += Math.cos(bike.rotation.y) * bikeSpeed;
-    if (keys['KeyA']) bike.rotation.y += turnSpeed;
-    if (keys['KeyD']) bike.rotation.y -= turnSpeed;
+    if (bike && keys['KeyW']) bike.position.z -= Math.cos(bike.rotation.y) * bikeSpeed;
+    if (bike && keys['KeyS']) bike.position.z += Math.cos(bike.rotation.y) * bikeSpeed;
+    if (bike && keys['KeyA']) bike.rotation.y += turnSpeed;
+    if (bike && keys['KeyD']) bike.rotation.y -= turnSpeed;
 
     // Camera follows bike
-    camera.position.x = bike.position.x - 10 * Math.sin(bike.rotation.y);
-    camera.position.y = bike.position.y + 5;
-    camera.position.z = bike.position.z - 10 * Math.cos(bike.rotation.y);
-    camera.lookAt(bike.position);
+    if (bike) {
+        camera.position.x = bike.position.x - 10 * Math.sin(bike.rotation.y);
+        camera.position.y = bike.position.y + 5;
+        camera.position.z = bike.position.z - 10 * Math.cos(bike.rotation.y);
+        camera.lookAt(bike.position);
+    }
 
     // Render scene
-    renderer.render(scene, camera);
+    if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+    }
 }
 
 function onWindowResize() {
