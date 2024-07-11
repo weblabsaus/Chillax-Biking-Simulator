@@ -1,8 +1,9 @@
 // Initialize Three.js scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas') });
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 // Example: Add ambient light
 const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
@@ -14,11 +15,11 @@ directionalLight.position.set(1, 1, 1);
 scene.add(directionalLight);
 
 // Example: Load bike model
-const loader = new THREE.GLTFLoader();
 let bike;
 
+const loader = new THREE.GLTFLoader();
 loader.load(
-    'assets/models/bike.glb',
+    'path/to/bike_model.glb',
     function (gltf) {
         bike = gltf.scene;
         bike.position.set(0, 0, 0);
@@ -26,7 +27,7 @@ loader.load(
     },
     undefined,
     function (error) {
-        console.error(error);
+        console.error('Error loading bike model:', error);
     }
 );
 
@@ -72,7 +73,7 @@ function animate() {
 document.getElementById('startButton').addEventListener('click', () => {
     document.getElementById('titleScreen').style.display = 'none';
     document.getElementById('info').style.display = 'block';
-    animate();
+    animate();  // Start the game animation loop
 });
 
 // Example: Handle window resizing
