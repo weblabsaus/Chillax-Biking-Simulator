@@ -7,12 +7,19 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="titleScreen">
-        <div>Advanced 3D Biking Game</div>
-        <button id="startButton">Start Game</button>
+    <div id="loadingScreen">
+        <div>Loading...</div>
     </div>
-    <div id="info">Use WASD to move, Space to jump</div>
-    <canvas id="gameCanvas"></canvas>
+    <div id="gameContainer">
+        <div id="gameUI">
+            <div id="titleScreen">
+                <div>Advanced 3D Biking Game</div>
+                <button id="startButton">Start Game</button>
+            </div>
+            <div id="info">Use WASD to move, Space to jump</div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+    </div>
     <script src="js/three.min.js"></script>
     <script src="js/GLTFLoader.js"></script>
     <script src="js/main.js"></script>
