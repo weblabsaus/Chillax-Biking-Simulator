@@ -24,29 +24,16 @@ function init() {
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
 
-    // Load bike model
-    const loader = new THREE.GLTFLoader();
-    loader.load(
-        'models/bike_model.glb',
-        function (gltf) {
-            bike = gltf.scene;
-            bike.position.set(0, 0, 0);
-            scene.add(bike);
+    // Create a simple bike model using basic shapes
+    const bikeGeometry = new THREE.BoxGeometry(1, 1, 2);
+    const bikeMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+    bike = new THREE.Mesh(bikeGeometry, bikeMaterial);
+    bike.position.set(0, 0.5, 0);
+    scene.add(bike);
 
-            // Hide loading screen and show game UI
-            loadingScreen.style.display = 'none';
-            document.getElementById('gameContainer').style.display = 'block';
-
-            // Start game when the model is loaded
-            startGame();
-        },
-        undefined,
-        function (error) {
-            console.error('Error loading bike model:', error);
-            loadingScreen.style.display = 'none'; // Hide loading screen on error
-            alert('Failed to load bike model. Please refresh the page to try again.');
-        }
-    );
+    // Hide loading screen and show game UI
+    loadingScreen.style.display = 'none';
+    document.getElementById('gameContainer').style.display = 'block';
 
     // Set initial camera position
     camera.position.set(0, 5, 10);
@@ -73,23 +60,19 @@ function animate() {
     requestAnimationFrame(animate);
 
     // Bike movement based on keys
-    if (bike && keys['KeyW']) bike.position.z -= Math.cos(bike.rotation.y) * bikeSpeed;
-    if (bike && keys['KeyS']) bike.position.z += Math.cos(bike.rotation.y) * bikeSpeed;
-    if (bike && keys['KeyA']) bike.rotation.y += turnSpeed;
-    if (bike && keys['KeyD']) bike.rotation.y -= turnSpeed;
+    if (keys['KeyW']) bike.position.z -= Math.cos(bike.rotation.y) * bikeSpeed;
+    if (keys['KeyS']) bike.position.z += Math.cos(bike.rotation.y) * bikeSpeed;
+    if (keys['KeyA']) bike.rotation.y += turnSpeed;
+    if (keys['KeyD']) bike.rotation.y -= turnSpeed;
 
     // Camera follows bike
-    if (bike) {
-        camera.position.x = bike.position.x - 10 * Math.sin(bike.rotation.y);
-        camera.position.y = bike.position.y + 5;
-        camera.position.z = bike.position.z - 10 * Math.cos(bike.rotation.y);
-        camera.lookAt(bike.position);
-    }
+    camera.position.x = bike.position.x - 10 * Math.sin(bike.rotation.y);
+    camera.position.y = bike.position.y + 5;
+    camera.position.z = bike.position.z - 10 * Math.cos(bike.rotation.y);
+    camera.lookAt(bike.position);
 
     // Render scene
-    if (renderer && scene && camera) {
-        renderer.render(scene, camera);
-    }
+    renderer.render(scene, camera);
 }
 
 function onWindowResize() {
